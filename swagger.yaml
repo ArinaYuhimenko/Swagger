@@ -1,0 +1,197 @@
+openapi: 3.0.0
+info:
+  title: OpenAPI домашняя видеотека
+  version: 0.0.1
+servers:
+- url: http://localhost:8081/api/v1/
+  description: Dev server
+paths:
+  /films:
+    get:
+      tags:
+      - Film
+      summary: Метод получения списка фильмов
+      operationId: get_all_films
+      responses:
+        "200":
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Film'
+        "400":
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-openapi-router-controller: swagger_server.controllers.film_controller
+    post:
+      tags:
+      - Film
+      summary: Метод создания фильма
+      operationId: create_film
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Film'
+        required: true
+      responses:
+        "200":
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Film'
+        "400":
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-openapi-router-controller: swagger_server.controllers.film_controller
+  /films/{film_id}:
+    get:
+      tags:
+      - Film
+      summary: Метод получения фильма по id
+      operationId: get_film_by_id
+      parameters:
+      - name: film_id
+        in: path
+        description: id фильма
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: 123e4567-e89b-12d3-a456-426614174000
+      responses:
+        "200":
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Film'
+        "400":
+          description: Oшибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-openapi-router-controller: swagger_server.controllers.film_controller
+    put:
+      tags:
+      - Film
+      summary: Метод обновления списка фильмов
+      operationId: update_film
+      parameters:
+      - name: film_id
+        in: path
+        description: id фильма
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: 123e4567-e89b-12d3-a456-426614174000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Film'
+        required: true
+      responses:
+        "200":
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Film'
+        "400":
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-openapi-router-controller: swagger_server.controllers.film_controller
+    delete:
+      tags:
+      - Film
+      summary: Метод удаления фильма
+      operationId: delete_film_by_id
+      parameters:
+      - name: film_id
+        in: path
+        description: id фильма
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: 123e4567-e89b-12d3-a456-426614174000
+      responses:
+        "200":
+          description: Успешное удаление
+          content:
+            application/json: {}
+        "400":
+          description: Oшибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-openapi-router-controller: swagger_server.controllers.film_controller
+components:
+  schemas:
+    Film:
+      required:
+      - genre
+      - name
+      type: object
+      properties:
+        film_id:
+          type: string
+          example: 123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          example: Avatar
+        genre:
+          type: string
+          description: Жанр фильма
+          enum:
+          - Fantasy
+          - Drama
+          - Comedy
+          - Romance
+          - Comedy
+          - Detective
+          - Thriller
+          - Horror
+          - Cartoon
+          - Documentary
+          - TV show
+        year_of_creation:
+          type: string
+          example: "2022"
+      example:
+        year_of_creation: "2022"
+        name: Avatar
+        genre: Fantasy
+        film_id: 123e4567-e89b-12d3-a456-426614174000
+    Films:
+      type: array
+      items:
+        $ref: '#/components/schemas/Film'
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: integer
+        massage:
+          type: string
+
